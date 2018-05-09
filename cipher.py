@@ -5,6 +5,7 @@ import numpy as np
 class Cipher():
 	key = []
 	data = []
+	theta = []
 	index = []
 	A = []
 	l,h = 0,0
@@ -31,17 +32,19 @@ class Cipher():
 
 	def genIndex(self):
 		data = self.data
-		index = data
 		l = self.l
 		h = self.h
 		#print l,h
 		mid = 1.0*(l+h)/2
 		diff = 1.0*(h-l)/2
-		index = 1.0*(index-mid)/diff # index为cos(θ)
-		assert(max(index)<=1+1e-10) # 检测是否会超过界限
-		assert(min(index)>=-1-1e-10)
-		index = np.array([index])
-		A = np.concatenate((index, np.sqrt(1-index*index), np.random.rand(1,index.shape[1])), axis=0)
+		cos = 1.0*(data-mid)/diff # cos(θ)
+		assert(max(cos)<=1+1e-10) # 检测是否会超过界限
+		assert(min(cos)>=-1-1e-10)
+		cos = np.array([cos])
+		sin = np.sqrt(1-cos*cos)
+		self.theta = np.concatenate((cos,sin),axis=0)
+		print self.theta
+		A = np.concatenate((cos, sin, np.random.rand(1,cos.shape[1])), axis=0)
 		A = A.T
 		self.A = A
 		self.index = np.dot(A,self.key[0])

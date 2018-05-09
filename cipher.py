@@ -43,7 +43,6 @@ class Cipher():
 		cos = np.array([cos])
 		sin = np.sqrt(1-cos*cos)
 		self.theta = np.concatenate((cos,sin),axis=0)
-		print self.theta
 		A = np.concatenate((cos, sin, np.random.rand(1,cos.shape[1])), axis=0)
 		A = A.T
 		self.A = A
@@ -79,15 +78,6 @@ class Cipher():
 
 	def genTestIndex(self):
 		data = self.data[:4]
-		# print data
-		l,h = self.l,self.h
-		mid = 1.0*(l+h)/2
-		diff = 1.0*(h-l)/2
-		data = 1.0*(data-mid)/diff
-		# print data
-		data = np.arccos(data)
-		# print data
+		theta = self.theta[:,:4]
 		index = self.index[:4]
-		# print index
-		print (data,index)
-		return (data, index)
+		return (data, theta, index)

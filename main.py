@@ -96,13 +96,25 @@ def hack(N):
 	# print(index)
 	cos,sin = theta[0],theta[1]
 	u3 = indexMinus(1,0)*sinMinus(1,2)-indexMinus(2,1)*sinMinus(0,1)
+	# 可以发现是线性相关的
 	print("u3=")
 	print(u3)
 	print("M4=")
-	print(C.key[0][2])
-	print(C.key[0])
+	print(C.key[0][2]) # 私钥M的最后一行，u4
+	print(C.key[0]) # 私钥M
 	u3.shape = [4,1]
 
+	X = solve() # 求解u1,u2,k1,k2,k3
+	u1 = X[0:4]
+	u2 = X[4:8]
+	k = X[8:11]
+
+	print("X=")
+	print(u1)
+	print(u2)
+	print(k)
+
+	u3 = 2*u3 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
 	X = solve()
 	u1 = X[0:4]
 	u2 = X[4:8]
@@ -113,18 +125,8 @@ def hack(N):
 	print(u2)
 	print(k)
 
-	u3 = 2*u3
-	X = solve()
-	u1 = X[0:4]
-	u2 = X[4:8]
-	k = X[8:11]
-
-	print("X=")
-	print(u1)
-	print(u2)
-	print(k)
-	
 	print("")
+	# 检查由X生成的index是否与真实的相等，现在是相等的
 	for i in range(3):
 		i1 = cos[i]*u1+sin[i]*u2+k[i]*u3.transpose()
 		print(i1)

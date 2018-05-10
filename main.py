@@ -59,6 +59,29 @@ def hack(N):
 	def sinMinus(i,j):
 		return sin[i]*cos[j] - cos[i]*sin[j]
 
+	def solve():
+		tmp = []
+		for i in range(3):
+			a = np.eye(4)*cos[i]
+			b = np.eye(4)*sin[i]
+			c = np.zeros([4,3])
+			for j in range(4):
+				c[j][i] = u3[j]
+			# print(c)
+			d = np.concatenate((a,b,c),axis=1)
+			# for j in d:
+			# 	print j
+			tmp.append(d)
+		A = np.concatenate(tmp,axis=0)
+		print(A.shape)
+		# print A
+
+		b = index[:3]
+		b.shape=[12,]
+		# 求解u1,u2,k1,k2,k3共11个未知数的超定方程组
+		X = np.linalg.solve(np.dot(A.T,A),np.dot(A.T,b))
+		return X
+
 	l,h = -1000,1000
 	data = [random.randint(l,h) for i in range(N)]
 	# print(min(data),max(data))
@@ -79,38 +102,29 @@ def hack(N):
 	print(C.key[0][2])
 	print(C.key[0])
 	u3.shape = [4,1]
-	# u3 = np.transpose(u3)
-	# print(u3)
 
-	tmp = []
-	for i in range(3):
-		a = np.eye(4)*cos[i]
-		b = np.eye(4)*sin[i]
-		c = np.zeros([4,3])
-		for j in range(4):
-			c[j][i] = u3[j]
-		# print(c)
-		d = np.concatenate((a,b,c),axis=1)
-		# for j in d:
-		# 	print j
-		tmp.append(d)
-	A = np.concatenate(tmp,axis=0)
-	# print A.shape
-	# print A
-
-	b = index[:3]
-	# print(b)
-	b.shape=[12,]
-	# 求解u1,u2,k1,k3,k3共11个未知数的超定方程组
-	X = np.linalg.solve(np.dot(A.T.copy(),A),np.dot(A.T.copy(),b))
-	print("X=")
-	print(X[0:4])
-	print(X[4:8])
-	print(X[8:11])
-
+	X = solve()
 	u1 = X[0:4]
 	u2 = X[4:8]
 	k = X[8:11]
+
+	print("X=")
+	print(u1)
+	print(u2)
+	print(k)
+
+	u3 = 2*u3
+	X = solve()
+	u1 = X[0:4]
+	u2 = X[4:8]
+	k = X[8:11]
+
+	print("X=")
+	print(u1)
+	print(u2)
+	print(k)
+	
+	print("")
 	for i in range(3):
 		i1 = cos[i]*u1+sin[i]*u2+k[i]*u3.transpose()
 		print(i1)

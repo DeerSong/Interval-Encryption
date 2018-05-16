@@ -59,12 +59,12 @@ def hack(N):
 	def sinMinus(i,j):
 		return sin[i]*cos[j] - cos[i]*sin[j]
 
-	def solve():
+	def solve(n):
 		tmp = []
-		for i in range(3):
+		for i in range(n):
 			a = np.eye(4)*cos[i]
 			b = np.eye(4)*sin[i]
-			c = np.zeros([4,3])
+			c = np.zeros([4,n])
 			for j in range(4):
 				c[j][i] = u3[j]
 			# print(c)
@@ -75,9 +75,14 @@ def hack(N):
 		A = np.concatenate(tmp,axis=0)
 		print(A.shape)
 		# print A
+		# A = A[:-1][:]
+		# print A
 
-		b = index[:3]
-		b.shape=[12,]
+		b = index[:n]
+		b.shape=[n*4,]
+		# print(b)
+		# b = b[:-1]
+		# print(b)
 		# 求解u1,u2,k1,k2,k3共11个未知数的超定方程组
 		X = np.linalg.solve(np.dot(A.T,A),np.dot(A.T,b))
 		return X
@@ -104,7 +109,7 @@ def hack(N):
 	print(C.key[0]) # 私钥M
 	u3.shape = [4,1]
 
-	X = solve() # 求解u1,u2,k1,k2,k3
+	X = solve(50) # 求解u1,u2,k1,k2,k3
 	u1 = X[0:4]
 	u2 = X[4:8]
 	k = X[8:11]
@@ -114,11 +119,11 @@ def hack(N):
 	print(u2)
 	print(k)
 
-	u3 = 10*u3 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
+	u3 = 2*u3 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
 	# u3 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
 	# u3.shape = [4,1]
 	# print(u3)
-	X = solve()
+	X = solve(3)
 	u1 = X[0:4]
 	u2 = X[4:8]
 	k = X[8:11]

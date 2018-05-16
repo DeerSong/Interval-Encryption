@@ -67,10 +67,7 @@ def hack(N):
 			c = np.zeros([4,n])
 			for j in range(4):
 				c[j][i] = u3[j]
-			# print(c)
 			d = np.concatenate((a,b,c),axis=1)
-			# for j in d:
-			# 	print j
 			tmp.append(d)
 		A = np.concatenate(tmp,axis=0)
 		print(A.shape)
@@ -83,8 +80,31 @@ def hack(N):
 		# print(b)
 		# b = b[:-1]
 		# print(b)
+
+		A,b = np.dot(A.T,A),np.dot(A.T,b)
+		# 以下3行是用来测试行列式计算求解方程的正确性的：修改A,b,方程矩阵的大小
+		# A = np.array([[2,3,-5],[1,-2,1],[3,1,3]]) 
+		# b = np.array([3,0,7])
+		# l = 3
+		l = 8+n
+		D = np.linalg.det(A)
+		X = np.zeros([l])
+		print(A.shape)
+		for i in range(l):
+			Ai = np.array(A)
+			for j in range(l):
+				Ai[j][i] = b[j]
+			Di = np.linalg.det(Ai)
+			X[i] = Di/D
+		print(u"X= 行列式方法")
+		print(X)
+		print(np.dot(A,X)-b)
+		# return X
 		# 求解u1,u2,k1,k2,k3共11个未知数的超定方程组
-		X = np.linalg.solve(np.dot(A.T,A),np.dot(A.T,b))
+		X = np.linalg.solve(A,b)
+		print(u"X= numpy自带方法")
+		print(X)
+		print(np.dot(A,X)-b)
 		return X
 
 	l,h = -1000,1000
@@ -106,10 +126,11 @@ def hack(N):
 	print(u3)
 	print("M4=")
 	print(C.key[0][2]) # 私钥M的最后一行，u4
+	print("M=")
 	print(C.key[0]) # 私钥M
 	u3.shape = [4,1]
 
-	X = solve(50) # 求解u1,u2,k1,k2,k3
+	X = solve(3) # 求解u1,u2,k1,k2,k3
 	u1 = X[0:4]
 	u2 = X[4:8]
 	k = X[8:11]
@@ -134,6 +155,7 @@ def hack(N):
 	print(k)
 
 	print("")
+	print(u"检验真实index与生成index是否相等")
 	# 检查由X生成的index是否与真实的相等，现在是相等的
 	for i in range(3):
 		i1 = cos[i]*u1+sin[i]*u2+k[i]*u3.transpose()

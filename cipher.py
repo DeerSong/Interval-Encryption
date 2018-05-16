@@ -77,7 +77,7 @@ class Cipher():
 		return self.index
 
 	def genTestIndex(self):
-		data = self.data[:4]
-		theta = self.theta[:,:4]
-		index = self.index[:4]
+		data = self.data[:10]
+		theta = self.theta[:,:10]
+		index = self.index[:10]
 		return (data, theta, index)

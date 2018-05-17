@@ -59,6 +59,13 @@ def hack(N):
 	def sinMinus(i,j):
 		return sin[i]*cos[j] - cos[i]*sin[j]
 
+	def isCorrelated(x,y,s):
+		print(s)
+		cos = np.dot(x,y.T)/np.linalg.norm(x)/np.linalg.norm(y) # cos值
+		if abs(cos)>0.999:
+			return True
+		return False
+
 	def solve(n):
 		tmp = []
 		for i in range(n):
@@ -116,16 +123,14 @@ def hack(N):
 	C.genIndex() # 由数据生成索引index
 
 	data, theta, index = C.genTestIndex()
-	# print(data)
-	# print(theta)
-	# print(index)
 	cos,sin = theta[0],theta[1]
 	u3 = indexMinus(1,0)*sinMinus(1,2)-indexMinus(2,1)*sinMinus(0,1)
 	# 可以发现是线性相关的
-	print("u3=")
-	print(u3)
-	print("M4=")
-	print(C.key[0][2]) # 私钥M的最后一行，u4
+	# print("u3=")
+	# print(u3)
+	# print("M4=")
+	# print(C.key[0][2]) # 私钥M的最后一行，u4
+	print(isCorrelated(u3,C.key[0][2],u"u4'与u4是否线性相关"))
 	print("M=")
 	print(C.key[0]) # 私钥M
 	u3.shape = [4,1]

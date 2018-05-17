@@ -75,7 +75,7 @@ def hack(N):
 			b = np.eye(4)*sin[i]
 			c = np.zeros([4,n])
 			for j in range(4):
-				c[j][i] = u3[j]
+				c[j][i] = u4[j]
 			d = np.concatenate((a,b,c),axis=1)
 			tmp.append(d)
 		A = np.concatenate(tmp,axis=0)
@@ -126,15 +126,15 @@ def hack(N):
 
 	data, theta, index = C.genTestIndex()
 	cos,sin = theta[0],theta[1]
-	u3 = indexMinus(1,0)*sinMinus(1,2)-indexMinus(2,1)*sinMinus(0,1)
-	# print("u3=")
-	# print(u3)
+	u4 = indexMinus(1,0)*sinMinus(1,2)-indexMinus(2,1)*sinMinus(0,1)
+	# print("u4=")
+	# print(u4)
 	# print("M4=")
 	# print(C.key[0][2]) # 私钥M的最后一行，u4
-	print(isCorrelated(u3,C.key[0][2],u"u4'与u4是否线性相关"))
+	print(isCorrelated(u4,C.key[0][2],u"u4'与u4是否线性相关"))
 	print("M=")
 	print(C.key[0]) # 私钥M
-	u3.shape = [4,1]
+	u4.shape = [4,1]
 
 	X = solve(3) # 求解u1,u2,k1,k2,k3
 	u1,u2,k = X[0:4],X[4:8],X[8:11]
@@ -144,13 +144,15 @@ def hack(N):
 	print(u2)
 	print(k)
 
-	print(isCorrelated(u1-C.key[0][0],u3,u"u1'-u1与u4是否线性相关"))
-	print(isCorrelated(u2-C.key[0][1],u3,u"u2'-u2与u4是否线性相关"))
+	print(isCorrelated(u1-C.key[0][0],u4,u"u1'-u1与u4是否线性相关"))
+	print(isCorrelated(u2-C.key[0][1],u4,u"u2'-u2与u4是否线性相关"))
 
-	u3 = 2*u3 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
-	# u3 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
-	# u3.shape = [4,1]
-	# print(u3)
+	# M` = np.concatenate((u1,u2,u4),axis=1)
+
+	u4 = 2*u4 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
+	# u4 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
+	# u4.shape = [4,1]
+	# print(u4)
 	X = solve(3)
 	u1,u2,k = X[0:4],X[4:8],X[8:11]
 
@@ -163,7 +165,7 @@ def hack(N):
 	print(u"检验真实index与生成index是否相等")
 	# 检查由X生成的index是否与真实的相等，现在是相等的
 	for i in range(3):
-		i1 = cos[i]*u1+sin[i]*u2+k[i]*u3.transpose()
+		i1 = cos[i]*u1+sin[i]*u2+k[i]*u4.transpose()
 		print(i1)
 		print(index[i])
 

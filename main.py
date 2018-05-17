@@ -61,7 +61,9 @@ def hack(N):
 
 	def isCorrelated(x,y,s):
 		print(s)
-		cos = np.dot(x,y.T)/np.linalg.norm(x)/np.linalg.norm(y) # cos值
+		x.shape = [1,x.shape[0]]
+		y.shape = [y.shape[0],1]
+		cos = np.dot(x,y)/np.linalg.norm(x)/np.linalg.norm(y) # cos值
 		if abs(cos)>0.999:
 			return True
 		return False
@@ -125,7 +127,6 @@ def hack(N):
 	data, theta, index = C.genTestIndex()
 	cos,sin = theta[0],theta[1]
 	u3 = indexMinus(1,0)*sinMinus(1,2)-indexMinus(2,1)*sinMinus(0,1)
-	# 可以发现是线性相关的
 	# print("u3=")
 	# print(u3)
 	# print("M4=")
@@ -136,23 +137,22 @@ def hack(N):
 	u3.shape = [4,1]
 
 	X = solve(3) # 求解u1,u2,k1,k2,k3
-	u1 = X[0:4]
-	u2 = X[4:8]
-	k = X[8:11]
+	u1,u2,k = X[0:4],X[4:8],X[8:11]
 
 	print("X=")
 	print(u1)
 	print(u2)
 	print(k)
 
+	print(isCorrelated(u1-C.key[0][0],u3,u"u1'-u1与u4是否线性相关"))
+	print(isCorrelated(u2-C.key[0][1],u3,u"u2'-u2与u4是否线性相关"))
+
 	u3 = 2*u3 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
 	# u3 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
 	# u3.shape = [4,1]
 	# print(u3)
 	X = solve(3)
-	u1 = X[0:4]
-	u2 = X[4:8]
-	k = X[8:11]
+	u1,u2,k = X[0:4],X[4:8],X[8:11]
 
 	print("X=")
 	print(u1)

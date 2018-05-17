@@ -109,7 +109,7 @@ def hack(N):
 		# print(X)
 		# print(np.dot(A,X)-b)
 		# return X
-		
+
 		# 求解u1,u2,k1,k2,k3共11个未知数的超定方程组
 		X = np.linalg.solve(A,b)
 		# print(u"X= numpy自带方法")
@@ -151,7 +151,7 @@ def hack(N):
 	print(isCorrelated(u2-C.key[0][1],u4,u"u2'-u2与u4是否线性相关"))
 
 	print("")
-	print(u"验证M’*N是否为[[1,0,0],[0,1,0],[0,0,0]]")
+	print(u"验证M'*N是否为[[1,0,0],[0,1,0],[0,0,0]]")
 	print(u"伪造索引值成功！")
 	u1.shape,u2.shape,u4.shape = [1,4],[1,4],[1,4]
 	M1 = np.concatenate((u1,u2,u4),axis=0)
@@ -169,14 +169,25 @@ def hack(N):
 	# print(u2)
 	# print(k)
 
+
+
 	print("")
-	print(u"检验真实index与生成index是否相等")
-	u4.shape = [4,1]
-	# 检查由X生成的index是否与真实的相等，现在是相等的
-	for i in range(3):
-		i1 = cos[i]*u1+sin[i]*u2+k[i]*u4.transpose()
-		print(i1)
-		print(index[i])
+	print(u"验证M*N'是否为[[1,0,0],[0,1,0],[0,0,0]]")
+	print(u"伪造陷门成功！")
+	u3 = np.random.randint(-10,10,size=(1,4)) # 生成一个随机的u3
+	M2 = np.concatenate((u1,u2,u3,u4),axis=0) # 拼成一个4*4的伪私钥
+	N2 = np.linalg.inv(M2) # 逆矩阵
+	N2 = np.delete(N2,3,axis=1) # 删掉最后一列
+	print(np.dot(C.key[0],N2))
+
+	# print("")
+	# print(u"检验真实index与生成index是否相等")
+	# u4.shape = [4,1]
+	# # 检查由X生成的index是否与真实的相等，现在是相等的
+	# for i in range(3):
+	# 	i1 = cos[i]*u1+sin[i]*u2+k[i]*u4.transpose()
+	# 	print(i1)
+	# 	print(index[i])
 
 if __name__ == '__main__':
 	# test(100,1)

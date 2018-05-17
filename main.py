@@ -105,15 +105,16 @@ def hack(N):
 				Ai[j][i] = b[j]
 			Di = np.linalg.det(Ai)
 			X[i] = Di/D
-		print(u"X= 行列式方法")
-		print(X)
-		print(np.dot(A,X)-b)
+		# print(u"X= 行列式方法")
+		# print(X)
+		# print(np.dot(A,X)-b)
 		# return X
+		
 		# 求解u1,u2,k1,k2,k3共11个未知数的超定方程组
 		X = np.linalg.solve(A,b)
-		print(u"X= numpy自带方法")
-		print(X)
-		print(np.dot(A,X)-b)
+		# print(u"X= numpy自带方法")
+		# print(X)
+		# print(np.dot(A,X)-b)
 		return X
 
 	l,h = -1000,1000
@@ -132,6 +133,7 @@ def hack(N):
 	# print("M4=")
 	# print(C.key[0][2]) # 私钥M的最后一行，u4
 	print(isCorrelated(u4,C.key[0][2],u"u4'与u4是否线性相关"))
+	print("")
 	print("M=")
 	print(C.key[0]) # 私钥M
 	u4.shape = [4,1]
@@ -144,25 +146,32 @@ def hack(N):
 	print(u2)
 	print(k)
 
+	print("")
 	print(isCorrelated(u1-C.key[0][0],u4,u"u1'-u1与u4是否线性相关"))
 	print(isCorrelated(u2-C.key[0][1],u4,u"u2'-u2与u4是否线性相关"))
 
-	# M` = np.concatenate((u1,u2,u4),axis=1)
+	print("")
+	print(u"验证M’*N是否为[[1,0,0],[0,1,0],[0,0,0]]")
+	print(u"伪造索引值成功！")
+	u1.shape,u2.shape,u4.shape = [1,4],[1,4],[1,4]
+	M1 = np.concatenate((u1,u2,u4),axis=0)
+	print(np.dot(M1,C.key[1]))
 
-	u4 = 2*u4 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
-	# u4 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
-	# u4.shape = [4,1]
-	# print(u4)
-	X = solve(3)
-	u1,u2,k = X[0:4],X[4:8],X[8:11]
+	# u4 = 2*u4 # 检查u4乘以一个实数之后，解是否满足u1,u2不变
+	# # u4 = C.key[0][2] # 检查把u4直接赋值为真实私钥，解是否满足u1,u2不变
+	# # u4.shape = [4,1]
+	# # print(u4)
+	# X = solve(3)
+	# u1,u2,k = X[0:4],X[4:8],X[8:11]
 
-	print("X=")
-	print(u1)
-	print(u2)
-	print(k)
+	# print("X=")
+	# print(u1)
+	# print(u2)
+	# print(k)
 
 	print("")
 	print(u"检验真实index与生成index是否相等")
+	u4.shape = [4,1]
 	# 检查由X生成的index是否与真实的相等，现在是相等的
 	for i in range(3):
 		i1 = cos[i]*u1+sin[i]*u2+k[i]*u4.transpose()
